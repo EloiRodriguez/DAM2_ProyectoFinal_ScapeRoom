@@ -14,11 +14,21 @@ public class PlayerBehavior : MonoBehaviour
     private bool moving;
     private List<GameObject> inventory = new List<GameObject>();
     public int inventorySize = 4;
+    public AudioClip footsteps_slow, footsteps_fast;
+    private AudioSource footsteps;
+    private bool audio_playing = false;
+    private bool running = false;
 
     void Awake() 
     {
         player_camera = transform.Find("FirstPersonCamera").gameObject;
         _rigidBody = gameObject.GetComponent<Rigidbody>();
+
+        footsteps = player_camera.GetComponent<AudioSource>();
+
+        footsteps.clip = footsteps_slow;
+        
+        footsteps.loop = true;
     }
     void Start()
     {
@@ -78,7 +88,26 @@ public class PlayerBehavior : MonoBehaviour
         if (D) x += 1;
         if (A) x += -1;
 
-        if (Input.GetKey(KeyCode.LeftControl)) delimiter = 1;
+        if (Input.GetKey(KeyCode.LeftControl)) 
+        {
+            delimiter = 1;
+            
+            if (!running)
+            {
+                footsteps.clip = footsteps_fast;
+                running = true;
+                audio_playing = false;
+            }
+        }
+        else
+        {
+            if (running)
+            {
+                footsteps.clip = footsteps_slow;
+                running = false;
+                audio_playing = false;
+            }
+        }
 
         if (moving)
         {
@@ -88,6 +117,8 @@ public class PlayerBehavior : MonoBehaviour
             }
 
             speed += acceleration - moderate;
+
+            PlaySteps(true);
         }
         else 
         {
@@ -101,6 +132,10 @@ public class PlayerBehavior : MonoBehaviour
             }
 
             speed -= stopping;
+
+            //audio_playing = false;
+
+            PlaySteps(false);
         }
 
         Vector3 move = transform.TransformDirection(new Vector3(x * speed * delimiter, _rigidBody.velocity.y, z * speed * delimiter));
@@ -116,6 +151,21 @@ public class PlayerBehavior : MonoBehaviour
         {
             gameObject.SetActive(false);
             inventory.Add(gameObject);
+        }
+    }
+
+    private void PlaySteps(bool play)
+    {
+        if (!audio_playing && play)
+        {
+            footsteps.Play();
+            audio_playing = true;
+        }
+        else if (audio_playing && !play)
+        {
+            footsteps.Pause();
+            Debug.Log("Deteniendo");
+            audio_playing = false;
         }
     }
 }
