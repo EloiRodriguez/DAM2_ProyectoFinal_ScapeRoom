@@ -16,12 +16,12 @@ public class PlayerBehavior : MonoBehaviour
     public int inventorySize = 4;
     public AudioClip footsteps_slow, footsteps_fast;
     private AudioSource footsteps;
-    private bool audio_playing = false;
     private bool running = false;
 
     void Awake() 
     {
         player_camera = transform.Find("FirstPersonCamera").gameObject;
+        
         _rigidBody = gameObject.GetComponent<Rigidbody>();
 
         footsteps = player_camera.GetComponent<AudioSource>();
@@ -62,13 +62,9 @@ public class PlayerBehavior : MonoBehaviour
 
         player_camera.transform.Rotate(vRotM * -1, 0, 0);
 
-        //player.transform.RotateAround(player.transform.position, Vector3.up, hRotM);
-
         transform.Rotate(0, hRotM, 0);
 
         verticalRotation += vRotM;
-
-        //FollowPlayer();
     }
 
     private void Move()
@@ -96,7 +92,6 @@ public class PlayerBehavior : MonoBehaviour
             {
                 footsteps.clip = footsteps_fast;
                 running = true;
-                audio_playing = false;
             }
         }
         else
@@ -105,7 +100,6 @@ public class PlayerBehavior : MonoBehaviour
             {
                 footsteps.clip = footsteps_slow;
                 running = false;
-                audio_playing = false;
             }
         }
 
@@ -119,6 +113,7 @@ public class PlayerBehavior : MonoBehaviour
             speed += acceleration - moderate;
 
             PlaySteps(true);
+            CameraBobbing();
         }
         else 
         {
@@ -133,16 +128,36 @@ public class PlayerBehavior : MonoBehaviour
 
             speed -= stopping;
 
-            //audio_playing = false;
-
             PlaySteps(false);
+
+            BobbingStop();
         }
 
         Vector3 move = transform.TransformDirection(new Vector3(x * speed * delimiter, _rigidBody.velocity.y, z * speed * delimiter));
 
         _rigidBody.velocity = Vector3.ClampMagnitude(move, speed * delimiter);
 
-        Debug.Log("Speed: " + speed);
+        //Debug.Log("Speed: " + speed);
+    }
+
+    private void BobbingStop()
+    {
+        Animator anim = player_camera.GetComponent<Animator>();
+        anim.speed = 0;
+    }
+
+    private void CameraBobbing()
+    {
+        Animator anim = player_camera.GetComponent<Animator>();
+        float sp = 1;
+
+        if (running)
+        {
+            sp = 2;
+        }
+        
+        anim.speed = sp;
+
     }
 
     public void Pick(GameObject gameObject)
@@ -156,16 +171,13 @@ public class PlayerBehavior : MonoBehaviour
 
     private void PlaySteps(bool play)
     {
-        if (!audio_playing && play)
+        if (!footsteps.isPlaying && play)
         {
             footsteps.Play();
-            audio_playing = true;
         }
-        else if (audio_playing && !play)
+        else if (footsteps.isPlaying && !play)
         {
             footsteps.Pause();
-            Debug.Log("Deteniendo");
-            audio_playing = false;
         }
     }
 }
