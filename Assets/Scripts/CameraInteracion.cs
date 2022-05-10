@@ -6,6 +6,7 @@ public class CameraInteracion : MonoBehaviour
 {
     private new Transform camera;
     private PlayerBehavior player;
+    public float raycastDistance = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,7 @@ public class CameraInteracion : MonoBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(camera.position, camera.forward, out hit, 2, LayerMask.GetMask("Interactable")))
+        if (Physics.Raycast(camera.position, camera.forward, out hit, raycastDistance, LayerMask.GetMask("Interactable")))
         {
             Debug.Log("Observing: " + hit.transform.name);
 
