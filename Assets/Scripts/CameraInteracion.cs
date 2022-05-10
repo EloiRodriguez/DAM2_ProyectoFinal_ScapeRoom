@@ -7,6 +7,7 @@ public class CameraInteracion : MonoBehaviour
     private new Transform camera;
     private PlayerBehavior player;
     public float raycastDistance = 2;
+    private bool interacting = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +29,15 @@ public class CameraInteracion : MonoBehaviour
 
             if (Input.GetKey(KeyCode.E))
             {
-                hit.transform.GetComponent<Interactable>().Interact(player);
+                if (!interacting)
+                {
+                    hit.transform.GetComponent<Interactable>().Interact(player);
+                    interacting = true;
+                }
+            }
+            else 
+            {
+                if (interacting) interacting = false; 
             }
         }
     }
