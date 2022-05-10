@@ -18,7 +18,7 @@ public class CameraInteracion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawRay(camera.position, camera.forward * 2, Color.blue);
+        Debug.DrawRay(camera.position, camera.forward * raycastDistance, Color.blue);
 
         RaycastHit hit;
 
