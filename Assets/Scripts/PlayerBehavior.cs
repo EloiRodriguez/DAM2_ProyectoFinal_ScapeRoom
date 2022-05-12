@@ -209,6 +209,14 @@ public class PlayerBehavior : MonoBehaviour
 
             item.transform.position = transform.position + transform.forward * 1;
             item.SetActive(true);
+
+            Rigidbody itemBody = item.GetComponent<Rigidbody>();
+            
+            if (itemBody != null)
+            {
+                itemBody.velocity = Vector3.zero;
+                itemBody.angularVelocity = Vector3.zero;
+            }
         }
     }
 
