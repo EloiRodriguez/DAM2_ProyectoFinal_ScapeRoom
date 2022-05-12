@@ -12,16 +12,15 @@ public class PlayerBehavior : MonoBehaviour
     private float verticalRotation = 0;
     private GameObject player_camera;
     private bool moving;
-    private List<GameObject> inventory = new List<GameObject>();
-    public int inventorySize = 4;
+    private Inventory inventory;
     public AudioClip footsteps_slow, footsteps_fast;
     private AudioSource footsteps;
-    private bool audio_playing = false;
     private bool running = false;
 
     void Awake() 
     {
         player_camera = transform.Find("FirstPersonCamera").gameObject;
+        
         _rigidBody = gameObject.GetComponent<Rigidbody>();
 
         footsteps = player_camera.GetComponent<AudioSource>();
@@ -29,16 +28,28 @@ public class PlayerBehavior : MonoBehaviour
         footsteps.clip = footsteps_slow;
         
         footsteps.loop = true;
+        
+        GameObject inventory = GameObject.FindGameObjectWithTag("Inventory");
+
+        if (inventory != null) this.inventory = inventory.GetComponent<Inventory>();
+
+        //Debug.Log(invTrans);
     }
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    void Update()
+    {
+        MouseScrolling();
+    }
+
     void FixedUpdate()
     {
         Move();
         RotationControl();
+        InventoryControl();
     }
 
     private void RotationControl()
@@ -62,13 +73,9 @@ public class PlayerBehavior : MonoBehaviour
 
         player_camera.transform.Rotate(vRotM * -1, 0, 0);
 
-        //player.transform.RotateAround(player.transform.position, Vector3.up, hRotM);
-
         transform.Rotate(0, hRotM, 0);
 
         verticalRotation += vRotM;
-
-        //FollowPlayer();
     }
 
     private void Move()
@@ -96,7 +103,6 @@ public class PlayerBehavior : MonoBehaviour
             {
                 footsteps.clip = footsteps_fast;
                 running = true;
-                audio_playing = false;
             }
         }
         else
@@ -105,7 +111,6 @@ public class PlayerBehavior : MonoBehaviour
             {
                 footsteps.clip = footsteps_slow;
                 running = false;
-                audio_playing = false;
             }
         }
 
@@ -119,6 +124,7 @@ public class PlayerBehavior : MonoBehaviour
             speed += acceleration - moderate;
 
             PlaySteps(true);
+            CameraBobbing();
         }
         else 
         {
@@ -133,39 +139,116 @@ public class PlayerBehavior : MonoBehaviour
 
             speed -= stopping;
 
-            //audio_playing = false;
-
             PlaySteps(false);
+
+            BobbingStop();
         }
 
         Vector3 move = transform.TransformDirection(new Vector3(x * speed * delimiter, _rigidBody.velocity.y, z * speed * delimiter));
 
         _rigidBody.velocity = Vector3.ClampMagnitude(move, speed * delimiter);
 
-        Debug.Log("Speed: " + speed);
+        //Debug.Log("Speed: " + speed);
     }
 
-    public void Pick(GameObject gameObject)
+    private void InventoryControl()
     {
-        if (inventory.Count < inventorySize)
+        int key = inventory.Selected;
+        bool A1, A2, A3, A4;
+
+        A1 = Input.GetKey(KeyCode.Alpha1);
+        A2 = Input.GetKey(KeyCode.Alpha2);
+        A3 = Input.GetKey(KeyCode.Alpha3);
+        A4 = Input.GetKey(KeyCode.Alpha4); 
+
+        if (A1 || A2 || A3 || A4)
         {
-            gameObject.SetActive(false);
-            inventory.Add(gameObject);
+            if (A1) key = 0;
+            if (A2) key = 1;
+            if (A3) key = 2;
+            if (A4) key = 3;
+        }
+
+        if (key != inventory.Selected) inventory.Selected = key;
+    }
+
+    private void MouseScrolling()
+    {
+        int scroll = (int) (Input.GetAxis("Mouse ScrollWheel") * 10);
+        int index = inventory.Selected;
+
+        index += scroll;
+
+        if (index < 0) index = 3;
+        if (index > 3) index = 0;
+
+        if (index != inventory.Selected) inventory.Selected = index;
+
+        Debug.Log("Scrolling: " + scroll);
+    }
+
+    private void BobbingStop()
+    {
+        Animator anim = player_camera.GetComponent<Animator>();
+        anim.speed = 0;
+    }
+
+    private void CameraBobbing()
+    {
+        Animator anim = player_camera.GetComponent<Animator>();
+        float sp = 1;
+
+        if (running)
+        {
+            sp = 2;
+        }
+        
+        anim.speed = sp;
+
+    }
+
+    public void Pick(GameObject item)
+    {
+        if (inventory != null)
+        {
+            if (!inventory.SelectedEmpty())
+            {
+                Drop();
+            }
+
+            item.SetActive(false);
+            inventory.SelectedSlot.SaveItem(item);
+        }
+    }
+
+    public void Drop()
+    {
+        if (!inventory.SelectedEmpty())
+        {
+            GameObject item = inventory.SelectedSlot.DropItem();
+
+            item.transform.position = transform.position + transform.forward * 1;
+            item.SetActive(true);
+
+            Rigidbody itemBody = item.GetComponent<Rigidbody>();
+            
+            if (itemBody != null)
+            {
+                itemBody.velocity = Vector3.zero;
+                itemBody.angularVelocity = Vector3.zero;
+            }
         }
     }
 
     private void PlaySteps(bool play)
     {
-        if (!audio_playing && play)
+        if (!footsteps.isPlaying && play)
         {
             footsteps.Play();
-            audio_playing = true;
         }
-        else if (audio_playing && !play)
+        else if (footsteps.isPlaying && !play)
         {
             footsteps.Pause();
-            Debug.Log("Deteniendo");
-            audio_playing = false;
         }
     }
 }

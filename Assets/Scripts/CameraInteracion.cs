@@ -6,6 +6,9 @@ public class CameraInteracion : MonoBehaviour
 {
     private new Transform camera;
     private PlayerBehavior player;
+    public float raycastDistance = 2;
+    private bool interacting = false;
+    private bool throwing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -17,18 +20,48 @@ public class CameraInteracion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawRay(camera.position, camera.forward * 2, Color.blue);
+        Interaction();
+        Throwing();    
+    }
+
+    private void Interaction()
+    {
+        Debug.DrawRay(camera.position, camera.forward * raycastDistance, Color.blue);
 
         RaycastHit hit;
 
-        if (Physics.Raycast(camera.position, camera.forward, out hit, 2, LayerMask.GetMask("Interactable")))
+        if (Physics.Raycast(camera.position, camera.forward, out hit, raycastDistance, LayerMask.GetMask("Interactable")))
         {
             Debug.Log("Observing: " + hit.transform.name);
 
             if (Input.GetKey(KeyCode.E))
             {
-                hit.transform.GetComponent<Interactable>().Interact(player);
+                if (!interacting)
+                {
+                    hit.transform.GetComponent<Interactable>().Interact(player);
+                    interacting = true;
+                }
             }
+            else 
+            {
+                if (interacting) interacting = false; 
+            }
+        }
+    }
+
+    private void Throwing()
+    {
+        if (Input.GetKey(KeyCode.Q))
+        {
+            if (!throwing)
+            {
+                player.Drop();
+                throwing = true;
+            }
+        }
+        else
+        {
+            if (throwing) throwing = false;
         }
     }
 }
