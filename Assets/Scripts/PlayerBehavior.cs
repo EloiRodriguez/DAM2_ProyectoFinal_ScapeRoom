@@ -12,8 +12,7 @@ public class PlayerBehavior : MonoBehaviour
     private float verticalRotation = 0;
     private GameObject player_camera;
     private bool moving;
-    private List<GameObject> inventory = new List<GameObject>();
-    public int inventorySize = 4;
+    private Inventory inventory;
     public AudioClip footsteps_slow, footsteps_fast;
     private AudioSource footsteps;
     private bool running = false;
@@ -29,6 +28,12 @@ public class PlayerBehavior : MonoBehaviour
         footsteps.clip = footsteps_slow;
         
         footsteps.loop = true;
+        
+        GameObject inventory = GameObject.FindGameObjectWithTag("Inventory");
+
+        if (inventory != null) this.inventory = inventory.GetComponent<Inventory>();
+
+        //Debug.Log(invTrans);
     }
     void Start()
     {
@@ -39,6 +44,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         Move();
         RotationControl();
+        InventoryControl();
     }
 
     private void RotationControl()
@@ -140,6 +146,27 @@ public class PlayerBehavior : MonoBehaviour
         //Debug.Log("Speed: " + speed);
     }
 
+    private void InventoryControl()
+    {
+        int key = inventory.Selected;
+        bool A1, A2, A3, A4;
+
+        A1 = Input.GetKey(KeyCode.Alpha1);
+        A2 = Input.GetKey(KeyCode.Alpha2);
+        A3 = Input.GetKey(KeyCode.Alpha3);
+        A4 = Input.GetKey(KeyCode.Alpha4); 
+
+        if (A1 || A2 || A3 || A4)
+        {
+            if (A1) key = 0;
+            if (A2) key = 1;
+            if (A3) key = 2;
+            if (A4) key = 3;
+        }
+
+        if (key != inventory.Selected) inventory.Selected = key;
+    }
+
     private void BobbingStop()
     {
         Animator anim = player_camera.GetComponent<Animator>();
@@ -160,12 +187,28 @@ public class PlayerBehavior : MonoBehaviour
 
     }
 
-    public void Pick(GameObject gameObject)
+    public void Pick(GameObject item)
     {
-        if (inventory.Count < inventorySize)
+        if (inventory != null)
         {
-            gameObject.SetActive(false);
-            inventory.Add(gameObject);
+            if (!inventory.SelectedEmpty())
+            {
+                Drop();
+            }
+
+            item.SetActive(false);
+            inventory.SelectedSlot.SaveItem(item);
+        }
+    }
+
+    public void Drop()
+    {
+        if (!inventory.SelectedEmpty())
+        {
+            GameObject item = inventory.SelectedSlot.DropItem();
+
+            item.transform.position = transform.position + transform.forward * 1;
+            item.SetActive(true);
         }
     }
 
