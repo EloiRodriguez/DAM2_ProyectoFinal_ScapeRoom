@@ -40,6 +40,11 @@ public class PlayerBehavior : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    void Update()
+    {
+        MouseScrolling();
+    }
+
     void FixedUpdate()
     {
         Move();
@@ -165,6 +170,21 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         if (key != inventory.Selected) inventory.Selected = key;
+    }
+
+    private void MouseScrolling()
+    {
+        int scroll = (int) (Input.GetAxis("Mouse ScrollWheel") * 10);
+        int index = inventory.Selected;
+
+        index += scroll;
+
+        if (index < 0) index = 3;
+        if (index > 3) index = 0;
+
+        if (index != inventory.Selected) inventory.Selected = index;
+
+        Debug.Log("Scrolling: " + scroll);
     }
 
     private void BobbingStop()
