@@ -144,11 +144,15 @@ public class PlayerBehavior : MonoBehaviour
             BobbingStop();
         }
 
-        Vector3 move = transform.TransformDirection(new Vector3(x * speed * delimiter, _rigidBody.velocity.y, z * speed * delimiter));
+        Vector3 move = _rigidBody.velocity;
 
-        _rigidBody.velocity = Vector3.ClampMagnitude(move, speed * delimiter);
+        move.x = x * speed * delimiter;
+        move.z = z * speed * delimiter;
 
-        //Debug.Log("Speed: " + speed);
+        move = Vector3.ClampMagnitude(transform.TransformDirection(move), speed * delimiter);
+        move.y = _rigidBody.velocity.y;
+
+        _rigidBody.velocity = move;
     }
 
     private void InventoryControl()
