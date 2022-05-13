@@ -5,7 +5,7 @@ using UnityEngine;
 public class AbrirCerrarCajon : Interactable
 {
     public Animator AnimCajon;
-	public bool open;
+    public bool open;
 
     public override void Interact(PlayerBehavior player)
     {
@@ -19,7 +19,7 @@ public class AbrirCerrarCajon : Interactable
             {
                 StartCoroutine(cerrarCajon());
             }
-        }    
+        }     
     }
 
     IEnumerator abrirCajon()
@@ -32,7 +32,7 @@ public class AbrirCerrarCajon : Interactable
     IEnumerator cerrarCajon()
     {
         AnimCajon.Play("Cerrar_Cajon");
-        open = true;
+        open = false;
         yield return new WaitForSeconds(.5f);
     }
 

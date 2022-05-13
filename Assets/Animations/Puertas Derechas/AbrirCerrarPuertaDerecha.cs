@@ -32,7 +32,7 @@ public class AbrirCerrarPuertaDerecha :  Interactable
     IEnumerator cerrarPuertaD()
     {
         AnimPuertaD.Play("Cerrar_PuertaD");
-        open = true;
+        open = false;
         yield return new WaitForSeconds(.5f);
     }
 
