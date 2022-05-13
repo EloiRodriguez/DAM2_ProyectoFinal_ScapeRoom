@@ -177,14 +177,14 @@ public class PlayerBehavior : MonoBehaviour
         int scroll = (int) (Input.GetAxis("Mouse ScrollWheel") * 10);
         int index = inventory.Selected;
 
-        index += scroll;
+        index -= scroll;
 
         if (index < 0) index = 3;
         if (index > 3) index = 0;
 
         if (index != inventory.Selected) inventory.Selected = index;
 
-        Debug.Log("Scrolling: " + scroll);
+        //Debug.Log("Scrolling: " + scroll);
     }
 
     private void BobbingStop()
@@ -219,6 +219,8 @@ public class PlayerBehavior : MonoBehaviour
             item.SetActive(false);
             inventory.SelectedSlot.SaveItem(item);
         }
+
+        inventory.SetItemName();
     }
 
     public void Drop()
@@ -238,6 +240,8 @@ public class PlayerBehavior : MonoBehaviour
                 itemBody.angularVelocity = Vector3.zero;
             }
         }
+
+        inventory.SetItemName();
     }
 
     private void PlaySteps(bool play)
