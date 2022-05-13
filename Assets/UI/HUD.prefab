@@ -277,10 +277,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inventory
       objectReference: {fileID: 0}
-    - target: {fileID: 6342894716427645484, guid: 100e71e2d9c529c46b58ba82142d1d01, type: 3}
-      propertyPath: m_TagString
-      value: Inventory
-      objectReference: {fileID: 0}
     - target: {fileID: 7151105404776509142, guid: 100e71e2d9c529c46b58ba82142d1d01, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
