@@ -2,36 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbrirCerrarCajon : Interactable
+public class AbrirCerrarPuertaDerecha :  Interactable
 {
-    public Animator AnimCajon;
-    public bool open;
+    public Animator AnimPuertaD;
+	public bool open;
 
     public override void Interact(PlayerBehavior player)
     {
         if (open == false)
         {
-            StartCoroutine(abrirCajon());
+            StartCoroutine(abrirPuertaD());
         }
         else
         {
             if (open == true)
             {
-                StartCoroutine(cerrarCajon());
+                StartCoroutine(cerrarPuertaD());
             }
-        }     
+        }    
     }
 
-    IEnumerator abrirCajon()
+    IEnumerator abrirPuertaD()
     {
-        AnimCajon.Play("Abrir_Cajon");
+        AnimPuertaD.Play("Abrir_PuertaD");
         open = true;
         yield return new WaitForSeconds(.5f);
     }
 
-    IEnumerator cerrarCajon()
+    IEnumerator cerrarPuertaD()
     {
-        AnimCajon.Play("Cerrar_Cajon");
+        AnimPuertaD.Play("Cerrar_PuertaD");
         open = false;
         yield return new WaitForSeconds(.5f);
     }
