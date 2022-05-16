@@ -69,4 +69,9 @@ public class Inventory : MonoBehaviour
             
         } else item_name.text = "Espacio vacío";
     }
+
+    public GameObject GetSelectedItem()
+    {
+        return slots[selected].Item;
+    }
 }
