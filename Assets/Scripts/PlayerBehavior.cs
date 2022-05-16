@@ -12,8 +12,7 @@ public class PlayerBehavior : MonoBehaviour
     private float verticalRotation = 0;
     private GameObject player_camera;
     private bool moving;
-    private List<GameObject> inventory = new List<GameObject>();
-    public int inventorySize = 4;
+    private Inventory inventory;
     public AudioClip footsteps_slow, footsteps_fast;
     private AudioSource footsteps;
     private bool running = false;
@@ -29,16 +28,28 @@ public class PlayerBehavior : MonoBehaviour
         footsteps.clip = footsteps_slow;
         
         footsteps.loop = true;
+        
+        GameObject inventory = GameObject.FindGameObjectWithTag("Inventory");
+
+        if (inventory != null) this.inventory = inventory.GetComponent<Inventory>();
+
+        //Debug.Log(invTrans);
     }
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    void Update()
+    {
+        MouseScrolling();
+    }
+
     void FixedUpdate()
     {
         Move();
         RotationControl();
+        InventoryControl();
     }
 
     private void RotationControl()
@@ -133,11 +144,51 @@ public class PlayerBehavior : MonoBehaviour
             BobbingStop();
         }
 
-        Vector3 move = transform.TransformDirection(new Vector3(x * speed * delimiter, _rigidBody.velocity.y, z * speed * delimiter));
+        Vector3 move = _rigidBody.velocity;
 
-        _rigidBody.velocity = Vector3.ClampMagnitude(move, speed * delimiter);
+        move.x = x * speed * delimiter;
+        move.z = z * speed * delimiter;
 
-        //Debug.Log("Speed: " + speed);
+        move = Vector3.ClampMagnitude(transform.TransformDirection(move), speed * delimiter);
+        move.y = _rigidBody.velocity.y;
+
+        _rigidBody.velocity = move;
+    }
+
+    private void InventoryControl()
+    {
+        int key = inventory.Selected;
+        bool A1, A2, A3, A4;
+
+        A1 = Input.GetKey(KeyCode.Alpha1);
+        A2 = Input.GetKey(KeyCode.Alpha2);
+        A3 = Input.GetKey(KeyCode.Alpha3);
+        A4 = Input.GetKey(KeyCode.Alpha4); 
+
+        if (A1 || A2 || A3 || A4)
+        {
+            if (A1) key = 0;
+            if (A2) key = 1;
+            if (A3) key = 2;
+            if (A4) key = 3;
+        }
+
+        if (key != inventory.Selected) inventory.Selected = key;
+    }
+
+    private void MouseScrolling()
+    {
+        int scroll = (int) (Input.GetAxis("Mouse ScrollWheel") * 10);
+        int index = inventory.Selected;
+
+        index -= scroll;
+
+        if (index < 0) index = 3;
+        if (index > 3) index = 0;
+
+        if (index != inventory.Selected) inventory.Selected = index;
+
+        //Debug.Log("Scrolling: " + scroll);
     }
 
     private void BobbingStop()
@@ -160,13 +211,41 @@ public class PlayerBehavior : MonoBehaviour
 
     }
 
-    public void Pick(GameObject gameObject)
+    public void Pick(GameObject item)
     {
-        if (inventory.Count < inventorySize)
+        if (inventory != null)
         {
-            gameObject.SetActive(false);
-            inventory.Add(gameObject);
+            if (!inventory.SelectedEmpty())
+            {
+                Drop();
+            }
+
+            item.SetActive(false);
+            inventory.SelectedSlot.SaveItem(item);
         }
+
+        inventory.SetItemName();
+    }
+
+    public void Drop()
+    {
+        if (!inventory.SelectedEmpty())
+        {
+            GameObject item = inventory.SelectedSlot.DropItem();
+
+            item.transform.position = transform.position + transform.forward * 1;
+            item.SetActive(true);
+
+            Rigidbody itemBody = item.GetComponent<Rigidbody>();
+            
+            if (itemBody != null)
+            {
+                itemBody.velocity = Vector3.zero;
+                itemBody.angularVelocity = Vector3.zero;
+            }
+        }
+
+        inventory.SetItemName();
     }
 
     private void PlaySteps(bool play)

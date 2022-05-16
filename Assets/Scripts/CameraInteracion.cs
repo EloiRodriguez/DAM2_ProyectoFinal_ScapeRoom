@@ -8,6 +8,7 @@ public class CameraInteracion : MonoBehaviour
     private PlayerBehavior player;
     public float raycastDistance = 2;
     private bool interacting = false;
+    private bool throwing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,12 @@ public class CameraInteracion : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        Interaction();
+        Throwing();    
+    }
+
+    private void Interaction()
     {
         Debug.DrawRay(camera.position, camera.forward * raycastDistance, Color.blue);
 
@@ -39,6 +46,22 @@ public class CameraInteracion : MonoBehaviour
             {
                 if (interacting) interacting = false; 
             }
+        }
+    }
+
+    private void Throwing()
+    {
+        if (Input.GetKey(KeyCode.Q))
+        {
+            if (!throwing)
+            {
+                player.Drop();
+                throwing = true;
+            }
+        }
+        else
+        {
+            if (throwing) throwing = false;
         }
     }
 }

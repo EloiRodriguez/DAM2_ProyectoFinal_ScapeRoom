@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Pickable : Interactable
 {
+    public Texture icon;
+    public new string name;
+
     public override void Interact(PlayerBehavior player)
     {
         base.Interact(player);
