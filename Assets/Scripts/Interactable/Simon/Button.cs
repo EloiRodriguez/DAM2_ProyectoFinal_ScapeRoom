@@ -6,17 +6,27 @@ public class Button : MonoBehaviour
 {   
     public float lightIntensity = 2;
     private new Light light;
-
+    private bool lightOnPress = true;
     private bool pressing = false;
+    public AudioClip clip;
+    private AudioSource source;
 
     private void Awake()
     {
         light = transform.GetChild(0).GetComponent<Light>();
+        source = transform.GetComponent<AudioSource>();
+        source.clip = clip;
     }
 
     public void LightOn()
     {
         light.intensity = lightIntensity;
+        
+        if (source.clip != null)
+        {
+            source.Play();
+            Debug.Log(gameObject.name);
+        }
     }
 
     public void LightOff()
@@ -34,7 +44,7 @@ public class Button : MonoBehaviour
 
         pressing = true;
         
-        LightOn();
+        if (lightOnPress) LightOn();
     }
 
     public void UnPress()
@@ -53,5 +63,11 @@ public class Button : MonoBehaviour
     public bool IsPressing
     {
         get { return pressing; }
+    }
+
+    public bool LightOnPress
+    {
+        get { return lightOnPress; }
+        set { lightOnPress = value; }
     }
 }
