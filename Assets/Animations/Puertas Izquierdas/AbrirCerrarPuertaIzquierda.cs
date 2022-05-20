@@ -5,9 +5,89 @@ using UnityEngine;
 public class AbrirCerrarPuertaIzquierda : Interactable
 {
     public Animator AnimPuertaIz;
+    private GameObject item;
 	public bool open;
+    private bool PuertaDormitorio = false;
+    private bool PuertaHabitacion1 = false;
+    private bool PuertaHabitacion2 = false;
+
+    public AudioSource puerta_cerrada;
+    public AudioSource cerrar_puerta;
+    public AudioSource abrir_puerta;
 
     public override void Interact(PlayerBehavior player)
+    {
+        Inventory inventory = player.GetInventory();
+        item = inventory.GetSelectedItem();
+
+        if (gameObject.tag == "Dormitorio")
+        {
+            if(item != null)
+            {
+                if (item.tag == "llave_dormitorio")
+                {
+                    PuertaDormitorio = true;
+                    inventory.SelectedSlot.DropItem();
+                    Destroy(item);
+                }
+            }
+            
+            if (PuertaDormitorio == true)
+            {
+                startAnimation();
+            } else
+            {
+                StartCoroutine(PuertaCerrada());
+            }
+
+        }else if (gameObject.tag == "Habitacion1")
+        {
+            if(item != null)
+            {
+               if (item.tag == "llave_habitacion1")
+                {
+                    PuertaHabitacion1 = true;
+                    inventory.SelectedSlot.DropItem();
+                    Destroy(item);
+                } 
+            }
+
+            if (PuertaHabitacion1 == true)
+            {
+                startAnimation();
+            } else
+            {
+                StartCoroutine(PuertaCerrada());
+            }
+
+        }else if (gameObject.tag == "Habitacion2")
+        {
+            if(item != null)
+            {
+                if (item.tag == "llave_habitacion2")
+                {
+                    PuertaHabitacion2 = true;
+                    inventory.SelectedSlot.DropItem();
+                    Destroy(item);
+                }
+            }
+
+            if (PuertaHabitacion2 == true)
+            {
+                startAnimation();
+            } else
+            {
+                StartCoroutine(PuertaCerrada());
+            }
+        }
+        else
+        {
+            startAnimation();
+        }
+  
+    }
+
+    private void startAnimation()
     {
         if (open == false)
         {
@@ -19,12 +99,13 @@ public class AbrirCerrarPuertaIzquierda : Interactable
             {
                 StartCoroutine(cerrarPuertaIz());
             }
-        }    
+        } 
     }
 
     IEnumerator abrirPuertaIz()
     {
         AnimPuertaIz.Play("Abrir_PuertaIz");
+        abrir_puerta.Play();
         open = true;
         yield return new WaitForSeconds(.5f);
     }
@@ -32,7 +113,15 @@ public class AbrirCerrarPuertaIzquierda : Interactable
     IEnumerator cerrarPuertaIz()
     {
         AnimPuertaIz.Play("Cerrar_PuertaIz");
+        cerrar_puerta.Play();
         open = false;
+        yield return new WaitForSeconds(.5f);
+    }
+
+    IEnumerator PuertaCerrada()
+    {
+        AnimPuertaIz.Play("Puerta_CerradaIz");
+        puerta_cerrada.Play();
         yield return new WaitForSeconds(.5f);
     }
 
