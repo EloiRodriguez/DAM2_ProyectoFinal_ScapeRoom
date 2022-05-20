@@ -6,6 +6,16 @@ TagManager:
   tags:
   - HUD
   - Inventory
+  - Dormitorio
+  - llave_dormitorio
+  - llave_habitacion1
+  - llave_habitacion2
+  - Habitacion1
+  - Habitacion2
+  - Tecla
+  - Boton_submit
+  - Boton_cancel
+  - Bano
   layers:
   - Default
   - TransparentFX

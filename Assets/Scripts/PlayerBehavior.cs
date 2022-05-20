@@ -259,4 +259,9 @@ public class PlayerBehavior : MonoBehaviour
             footsteps.Pause();
         }
     }
+
+    public Inventory GetInventory()
+    {
+        return inventory;
+    }
 }
