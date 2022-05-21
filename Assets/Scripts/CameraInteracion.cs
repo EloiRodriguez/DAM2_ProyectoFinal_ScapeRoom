@@ -64,4 +64,10 @@ public class CameraInteracion : MonoBehaviour
             if (throwing) throwing = false;
         }
     }
+
+    public bool IsThrowing
+    {
+        get { return throwing; }
+        set { throwing = value; }
+    }
 }
