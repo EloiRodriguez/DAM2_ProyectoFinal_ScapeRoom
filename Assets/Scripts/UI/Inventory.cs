@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour
     private int selected = 0;
     private Text item_name;
 
-    private void Awake()
+    private void Start()
     {
         slots = new List<Slot>();
         item_name = transform.Find("item_name").GetChild(1).GetComponent<Text>();
