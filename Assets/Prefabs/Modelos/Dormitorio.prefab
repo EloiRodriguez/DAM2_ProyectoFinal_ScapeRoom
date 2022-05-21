@@ -123,8 +123,6 @@ GameObject:
   m_Component:
   - component: {fileID: 60978270253895784}
   - component: {fileID: 60978270253895791}
-  - component: {fileID: 60978270253895790}
-  - component: {fileID: 60978270253895785}
   m_Layer: 0
   m_Name: Drawer_L
   m_TagString: Untagged
@@ -160,40 +158,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.6025672, y: 0.2636171, z: 0.08435202}
   m_Center: {x: 0.84, y: 0.18706265, z: 0.58}
---- !u!114 &60978270253895790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60978270253895787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1a01b1ef84add0458f524da98451c86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pull: {fileID: 60978270253895785}
-  open: 0
-  Player: {fileID: 0}
---- !u!95 &60978270253895785
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60978270253895787}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dc24fcef3393733459eaad6c68ba9bc6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &130472843632134223
 GameObject:
   m_ObjectHideFlags: 0
@@ -7042,6 +7006,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimPuertaIz: {fileID: 8097069599796741361}
   open: 0
+  puerta_cerrada: {fileID: 0}
+  cerrar_puerta: {fileID: 0}
+  abrir_puerta: {fileID: 0}
 --- !u!1 &5782250757167882455
 GameObject:
   m_ObjectHideFlags: 0

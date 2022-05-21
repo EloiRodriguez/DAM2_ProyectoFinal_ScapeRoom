@@ -16,6 +16,7 @@ TagManager:
   - Boton_submit
   - Boton_cancel
   - Bano
+  - cajoncerrado
   layers:
   - Default
   - TransparentFX

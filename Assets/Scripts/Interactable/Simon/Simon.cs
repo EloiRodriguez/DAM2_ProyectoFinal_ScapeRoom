@@ -8,6 +8,8 @@ public class Simon : Interactable
     private string[] colors = {"red", "green", "yellow", "blue"};
     private new GameObject camera;
     private GameObject player;
+
+    public AbrirCerrarCajon cajon;
     private bool pressing = false;
     
     //Game algorithm variables;
@@ -132,7 +134,7 @@ public class Simon : Interactable
             if (repeats[repeats_index] == colors[index]) repeats_index++;
             else ClearGame();
 
-            if (repeats_index == 10)
+            if (repeats_index == 3)
             {
                 FinishGame();
             }
@@ -159,6 +161,8 @@ public class Simon : Interactable
     {
         complete = true;
         Leave();
+        cajon.Setbloqueocajon(true);
+        cajon.StartAnimation();
     }
 
     private IEnumerator ButtonLightOn(string button_index, float time)
