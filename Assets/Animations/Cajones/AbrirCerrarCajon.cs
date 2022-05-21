@@ -6,7 +6,7 @@ public class AbrirCerrarCajon : Interactable
 {
     public Animator AnimCajon;
     private bool bloqueocajon = false;
-    public AudioSource cajon_cerrado;
+    private AudioSource cajon_cerrado;
     public bool open;
 
     private void Start()
