@@ -6,9 +6,11 @@ using UnityEngine;
 public class Cerradura_numerica :   Interactable
 {
     private AudioSource sonido_boton;
+    public AudioSource error_code;
     private GameObject texto;
     private TextMeshPro texto_mesh;
     public AbrirCerrarPuertaDerecha acpd;
+    public AbrirCerrarCajon acc;
     public int value;
     public int acertijo; 
     
@@ -61,22 +63,38 @@ public class Cerradura_numerica :   Interactable
                 acpd.SetPuertaBano(true);
                 acpd.startAnimation();
             }
+            else
+            {
+                texto_mesh.text = "****";
+                error_code.Play();
+            }
         }
 
         if (acertijo == 2)
         {
             if (texto_mesh.text == "8614")
             {
-                acpd.SetPuertaSalida(true);
+                acc.Setbloqueocajon(true);
+                acc.StartAnimation();
+            }
+            else
+            {
+                texto_mesh.text = "****";
+                error_code.Play();
             }
         }
 
-        if (acertijo == 2)
+        if (acertijo == 3)
         {
-            if (texto_mesh.text == "5876")
+            if (texto_mesh.text == "9801")
             {
                 acpd.SetPuertaSalida(true);
                 acpd.startAnimation();
+            }
+            else
+            {
+                texto_mesh.text = "****";
+                error_code.Play();
             }
         }
         
