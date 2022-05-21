@@ -8,7 +8,7 @@ public class Simon : Interactable
     private string[] colors = {"red", "green", "yellow", "blue"};
     private new GameObject camera;
     private GameObject player;
-
+    public AudioSource error;
     public AbrirCerrarCajon cajon;
     private bool pressing = false;
     
@@ -132,7 +132,12 @@ public class Simon : Interactable
         if (!IsComplete && player_play && repeats.Count > 0)
         {
             if (repeats[repeats_index] == colors[index]) repeats_index++;
-            else ClearGame();
+            else
+            {
+                Invoke("ClearGame",3f);
+                error.Play();
+            }
+             
 
             if (repeats_index == 3)
             {
