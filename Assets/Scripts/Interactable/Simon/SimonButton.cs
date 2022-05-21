@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : MonoBehaviour
+public class SimonButton : MonoBehaviour
 {   
     public float lightIntensity = 2;
     private new Light light;

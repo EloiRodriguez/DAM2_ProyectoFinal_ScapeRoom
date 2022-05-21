@@ -18,6 +18,9 @@ TagManager:
   - Bano
   - cajoncerrado
   - Salida
+  - Main Menu
+  - Level Selection
+  - Pause Manager
   layers:
   - Default
   - TransparentFX

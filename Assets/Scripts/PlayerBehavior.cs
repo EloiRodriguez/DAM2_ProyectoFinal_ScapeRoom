@@ -16,6 +16,7 @@ public class PlayerBehavior : MonoBehaviour
     public AudioClip footsteps_slow, footsteps_fast;
     private AudioSource footsteps;
     private bool running = false;
+    private bool freeze = false;
 
     void Awake() 
     {
@@ -42,14 +43,18 @@ public class PlayerBehavior : MonoBehaviour
 
     void Update()
     {
-        MouseScrolling();
+        if (!freeze) MouseScrolling();
     }
 
     void FixedUpdate()
     {
         Move();
-        RotationControl();
-        InventoryControl();
+
+        if (!freeze)
+        {
+            RotationControl();
+            InventoryControl();
+        }
     }
 
     private void RotationControl()
@@ -94,6 +99,8 @@ public class PlayerBehavior : MonoBehaviour
         if (S) z += -1;
         if (D) x += 1;
         if (A) x += -1;
+
+        if (freeze) moving = false;
 
         if (Input.GetKey(KeyCode.LeftControl)) 
         {
@@ -209,6 +216,12 @@ public class PlayerBehavior : MonoBehaviour
         
         anim.speed = sp;
 
+    }
+
+    public bool Freeze
+    {
+        get { return freeze; }
+        set { freeze = value; }
     }
 
     public void Pick(GameObject item)
