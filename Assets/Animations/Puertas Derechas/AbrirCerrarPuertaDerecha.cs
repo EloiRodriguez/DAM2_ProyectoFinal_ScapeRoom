@@ -61,7 +61,15 @@ public class AbrirCerrarPuertaDerecha :  Interactable
     IEnumerator abrirPuertaD()
     {
         AnimPuertaD.Play("Abrir_PuertaD");
-        abrir_puerta.Play();
+
+        if(gameObject.tag == "Salida")
+        {
+            abrir_puerta.Play();
+        }else if (gameObject.tag == "Bano")
+        {
+            abrir_puerta.Play();
+        }
+        
         open = true;
         yield return new WaitForSeconds(.5f);
     }
@@ -69,7 +77,15 @@ public class AbrirCerrarPuertaDerecha :  Interactable
     IEnumerator cerrarPuertaD()
     {
         AnimPuertaD.Play("Cerrar_PuertaD");
-        cerrar_puerta.Play();
+
+        if(gameObject.tag == "Salida")
+        {
+            cerrar_puerta.Play();
+        }else if (gameObject.tag == "Bano")
+        {
+            cerrar_puerta.Play();
+        }
+        
         open = false;
         yield return new WaitForSeconds(.5f);
     }
@@ -77,7 +93,15 @@ public class AbrirCerrarPuertaDerecha :  Interactable
     IEnumerator PuertaCerrada()
     {
         AnimPuertaD.Play("Puerta_CerradaD");
-        puerta_cerrada.Play();
+
+        if(gameObject.tag == "Salida")
+        {
+            puerta_cerrada.Play();
+        }else if (gameObject.tag == "Bano")
+        {
+            puerta_cerrada.Play();
+        }
+        
         yield return new WaitForSeconds(.5f);
     }
 

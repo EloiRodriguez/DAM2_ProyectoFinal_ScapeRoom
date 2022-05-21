@@ -5,21 +5,47 @@ using UnityEngine;
 public class AbrirCerrarCajon : Interactable
 {
     public Animator AnimCajon;
+    private bool bloqueocajon = false;
+    public AudioSource cajon_cerrado;
     public bool open;
+
+    private void Start()
+    {
+        cajon_cerrado = transform.GetComponent<AudioSource>();
+    }
 
     public override void Interact(PlayerBehavior player)
     {
-        if (open == false)
+        if(gameObject.tag == "cajoncerrado")
         {
-            StartCoroutine(abrirCajon());
-        }
-        else
-        {
-            if (open == true)
+            if (bloqueocajon == true)
             {
-                StartCoroutine(cerrarCajon());
+                StartAnimation();
+            }else
+            {
+                cajon_cerrado.Play();
             }
-        }     
+            
+        }else
+        {
+           StartAnimation();
+        }
+             
+    }
+
+    public void StartAnimation()
+    {
+        if (open == false)
+            {
+                StartCoroutine(abrirCajon());
+            }
+            else
+            {
+                if (open == true)
+                {
+                    StartCoroutine(cerrarCajon());
+                }
+            } 
     }
 
     IEnumerator abrirCajon()
@@ -35,5 +61,7 @@ public class AbrirCerrarCajon : Interactable
         open = false;
         yield return new WaitForSeconds(.5f);
     }
+
+    public void Setbloqueocajon(bool bolean) => this.bloqueocajon = bolean;
 
 }
