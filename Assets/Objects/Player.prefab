@@ -57,7 +57,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.2
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 80
   orthographic: 0
@@ -231,7 +231,7 @@ Transform:
   m_GameObject: {fileID: 9220821292098968334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1.25, z: 1}
+  m_LocalScale: {x: 0.75, y: 1.25, z: 0.75}
   m_Children:
   - {fileID: 883568715}
   m_Father: {fileID: 0}
@@ -331,7 +331,6 @@ MonoBehaviour:
   sprint: 7.5
   acceleration: 0.5
   mouse_sensitivity: 10
-  inventorySize: 4
   footsteps_slow: {fileID: 8300000, guid: 0c643a5b29c797c42b11879126926091, type: 3}
   footsteps_fast: {fileID: 8300000, guid: 68c026f7d5cc1c943854eeb273cd6df9, type: 3}
 --- !u!114 &1636493774
