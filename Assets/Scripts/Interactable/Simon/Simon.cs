@@ -134,7 +134,7 @@ public class Simon : Interactable
             if (repeats[repeats_index] == colors[index]) repeats_index++;
             else
             {
-                Invoke("ClearGame",3f);
+                Invoke("ClearGame", 3f);
                 error.Play();
             }
              

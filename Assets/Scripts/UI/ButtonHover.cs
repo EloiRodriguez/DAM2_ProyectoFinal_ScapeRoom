@@ -50,7 +50,9 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private void OnClick()
     {
         if (action == "Navigate") navigator.Navigate();
+        
         if (action == "Close") Application.Quit();
+        
         if (action == "Pause")
         {
             PauseManager pm = pauseManager.GetComponent<PauseManager>();
@@ -58,6 +60,8 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if (pm.Paused) pm.UnPause();
             else pm.Pause();
         }
+
+        if (action == "Reload") navigator.ReloadScene();
 
         ResetPosition();
     }
