@@ -24,6 +24,16 @@ public class Navigator : MonoBehaviour
         }
     }
 
+    public void ReloadScene()
+    {
+        if (SceneNavigation)
+        {
+            Scene scene = SceneManager.GetActiveScene();
+
+            SceneManager.LoadScene(scene.name);
+        }
+    }
+
     private void ChangeScreen()
     {
         selfScreen.SetActive(false);
